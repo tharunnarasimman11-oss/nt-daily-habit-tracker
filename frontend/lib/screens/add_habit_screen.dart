@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/habit_provider.dart';
 
 class AddHabitScreen extends StatefulWidget {
-  const AddHabitScreen({Key? key}) : super(key: key);
+  const AddHabitScreen({super.key});
 
   @override
   State<AddHabitScreen> createState() => _AddHabitScreenState();

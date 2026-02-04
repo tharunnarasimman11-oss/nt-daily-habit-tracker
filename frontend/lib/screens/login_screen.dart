@@ -1,9 +1,10 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/habit_provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -24,14 +25,14 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      print('[LOGIN] Starting login with username: ${_usernameController.text}');
+      developer.log('[LOGIN] Starting login with username: ${_usernameController.text}', name: 'LoginScreen');
       await context.read<HabitProvider>().initializeUser(_usernameController.text);
-      print('[LOGIN] User initialized successfully');
+      developer.log('[LOGIN] User initialized successfully', name: 'LoginScreen');
       if (mounted) {
         Navigator.of(context).pushReplacementNamed('/home');
       }
-    } catch (e) {
-      print('[LOGIN] Error during login: $e');
+    } catch (e, st) {
+      developer.log('[LOGIN] Error during login: $e', name: 'LoginScreen', error: e, stackTrace: st);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),
