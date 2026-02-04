@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api_service.dart';
@@ -15,8 +16,8 @@ class HabitProvider extends ChangeNotifier {
     try {
       currentUser = await ApiService.getOrCreateUser(username);
       await loadHabits();
-    } catch (e) {
-      print('Error initializing user: $e');
+    } catch (e, st) {
+      developer.log('Error initializing user: $e', name: 'HabitProvider', error: e, stackTrace: st);
     }
     isLoading = false;
     notifyListeners();
@@ -24,17 +25,17 @@ class HabitProvider extends ChangeNotifier {
 
   Future<void> loadHabits() async {
     try {
-      print('[HABITS] Loading habits for user ${currentUser.id}');
+      developer.log('[HABITS] Loading habits for user ${currentUser.id}', name: 'HabitProvider');
       habits = await ApiService.getHabits(currentUser.id);
-      print('[HABITS] Got ${habits.length} habits');
+      developer.log('[HABITS] Got ${habits.length} habits', name: 'HabitProvider');
       for (var habit in habits) {
         await loadStreak(habit.id!);
         await loadCompletions(habit.id!);
       }
-      print('[HABITS] All habits loaded successfully');
+      developer.log('[HABITS] All habits loaded successfully', name: 'HabitProvider');
       notifyListeners();
-    } catch (e) {
-      print('Error loading habits: $e');
+    } catch (e, st) {
+      developer.log('Error loading habits: $e', name: 'HabitProvider', error: e, stackTrace: st);
       rethrow;
     }
   }
@@ -45,8 +46,8 @@ class HabitProvider extends ChangeNotifier {
       habits.add(habit);
       await loadStreak(habit.id!);
       notifyListeners();
-    } catch (e) {
-      print('Error adding habit: $e');
+    } catch (e, st) {
+      developer.log('Error adding habit: $e', name: 'HabitProvider', error: e, stackTrace: st);
     }
   }
 
@@ -57,8 +58,8 @@ class HabitProvider extends ChangeNotifier {
       streaks.remove(habitId);
       completions.remove(habitId);
       notifyListeners();
-    } catch (e) {
-      print('Error removing habit: $e');
+    } catch (e, st) {
+      developer.log('Error removing habit: $e', name: 'HabitProvider', error: e, stackTrace: st);
     }
   }
 
@@ -68,8 +69,8 @@ class HabitProvider extends ChangeNotifier {
       await loadStreak(habitId);
       await loadCompletions(habitId);
       notifyListeners();
-    } catch (e) {
-      print('Error completing habit: $e');
+    } catch (e, st) {
+      developer.log('Error completing habit: $e', name: 'HabitProvider', error: e, stackTrace: st);
     }
   }
 
@@ -78,8 +79,8 @@ class HabitProvider extends ChangeNotifier {
       final streak = await ApiService.getStreak(habitId);
       streaks[habitId] = streak;
       notifyListeners();
-    } catch (e) {
-      print('Error loading streak: $e');
+    } catch (e, st) {
+      developer.log('Error loading streak: $e', name: 'HabitProvider', error: e, stackTrace: st);
     }
   }
 
@@ -88,8 +89,8 @@ class HabitProvider extends ChangeNotifier {
       final comps = await ApiService.getCompletions(habitId);
       completions[habitId] = comps;
       notifyListeners();
-    } catch (e) {
-      print('Error loading completions: $e');
+    } catch (e, st) {
+      developer.log('Error loading completions: $e', name: 'HabitProvider', error: e, stackTrace: st);
     }
   }
 
